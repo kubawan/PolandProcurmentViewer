@@ -1,4 +1,7 @@
-﻿using System;
+﻿using PP.Connection.JsonDataClasses;
+using System;
+using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
@@ -10,27 +13,29 @@ namespace PP.Connection
     {
         private static readonly string apiBasiUri = "https://tenders.guru/api/pl/tenders";
 
-        private HttpClient client { get; set; }
-
         public PPConnection()
         {
-            CreateHttpClient();
+
         }
 
-        private void CreateHttpClient()
+        public string Get(string url)
         {
-            client = new HttpClient();
-            client.BaseAddress = new Uri(apiBasiUri);
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            var query = apiBasiUri + url;
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(query);
+            request.Method = "GET";
+            request.ContentType = "application/x-www-form-urlencoded";
+
+            WebResponse response = request.GetResponse();
+            StreamReader reader = new StreamReader(response.GetResponseStream());
+            var msg = reader.ReadToEnd();
+            reader.Close();
+            return msg;
         }
 
-        public async Task<T> Get<T>(string url)
+        public T DeserializeJson<T>(string jsonMsg)
         {
-            var result = await client.GetAsync(url);
-            result.EnsureSuccessStatusCode();
-            string resultContentString = await result.Content.ReadAsStringAsync();
-            T data = JsonSerializer.Deserialize<T>(resultContentString);
-            return data;
+            return JsonSerializer.Deserialize<T>(jsonMsg);
         }
     }
 }
