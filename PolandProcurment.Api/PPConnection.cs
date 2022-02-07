@@ -1,5 +1,4 @@
-﻿using PP.Connection.JsonDataClasses;
-using System;
+﻿using System;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -18,9 +17,9 @@ namespace PP.Connection
 
         }
 
-        public string Get(string url)
+        public string Get(string requestDetails, RequestType requestType)
         {
-            var query = apiBasiUri + url;
+            var query = GetQuery(requestDetails, requestType);
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(query);
             request.Method = "GET";
@@ -31,6 +30,19 @@ namespace PP.Connection
             var msg = reader.ReadToEnd();
             reader.Close();
             return msg;
+        }
+
+        private string GetQuery(string requestDetails, RequestType requestType)
+        {
+            switch (requestType)
+            {
+                case RequestType.ListTenders:
+                    return $"{apiBasiUri}";
+                case RequestType.TenderDetails:
+                    return $"{apiBasiUri}/{requestDetails}";
+                default:
+                    return "";
+            }
         }
 
         public T DeserializeJson<T>(string jsonMsg)

@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PP.Connection.JsonDataClasses
+namespace PP.Connection
 {
-    public class Awarded
+    public enum RequestType
     {
+        ListTenders,
+        TenderDetails,
     }
 }

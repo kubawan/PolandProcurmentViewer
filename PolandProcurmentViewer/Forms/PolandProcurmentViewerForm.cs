@@ -1,5 +1,5 @@
 ﻿using PP.Connection;
-using PP.Connection.JsonDataClasses;
+using PP.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -25,16 +25,26 @@ namespace PP.Viewer
 
         private void GetDataBtn_Click(object sender, EventArgs e)
         {
-            FillData(_ppConnection.DeserializeJson<Tenders>(_ppConnection.Get("")));
+            FillData(_ppConnection.DeserializeJson<Tenders>(_ppConnection.Get("", RequestType.ListTenders)));
         }
 
         private void FillData(Tenders tendersData)
         {
-            BindingSource bindingSource = new BindingSource();
-            bindingSource.DataSource = tendersData.Tender;
-            TenderGridViewer.DataSource = bindingSource;
-            TenderGridViewer.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader);
-            TenderGridViewer.AutoGenerateColumns = true;
+            foreach (Tender tender in tendersData.TendersList)
+            {
+                TendersListBox.Items.Add(tender);
+                TendersListBox.DisplayMember = "Id";
+            }
+        }
+
+        private void TendersListBox_SelectedIndexChanged(object sender, System.EventArgs e)
+        {
+            var tender = TendersListBox.SelectedItem as Tender;
+
+            tender = _ppConnection.DeserializeJson<Tender>(_ppConnection.Get($"{tender.Id}", RequestType.TenderDetails));
+
+            lblTenderIdData.Text = tender.Id;
+            lblTenderTitleData.Text = tender.Title;
         }
 
     }

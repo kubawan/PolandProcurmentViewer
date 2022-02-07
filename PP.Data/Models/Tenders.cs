@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace PP.Connection.JsonDataClasses
+namespace PP.Data.Models
 {
     public class Tenders
     {
@@ -22,6 +22,6 @@ namespace PP.Connection.JsonDataClasses
         public int Total { get; set; }
 
         [JsonPropertyName("data")]
-        public List<Tender> Tender { get; set; }
+        public List<Tender>? TendersList { get; set; }
     }
 }

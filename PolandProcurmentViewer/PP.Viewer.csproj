@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
 
@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PolandProcurment.Api\PP.Connection.csproj" />
+    <ProjectReference Include="..\PP.Data\PP.Data.csproj" />
   </ItemGroup>
 
 </Project>
